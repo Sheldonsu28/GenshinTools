@@ -1,6 +1,4 @@
 from __future__ import annotations
-from Block_class import BlockUnit
-from typing import List
 from Algorithms import *
 
 
@@ -17,37 +15,33 @@ class Board:
             return result
 
 
-# A, B
-# C, D
-
-#   0
-# 1   3
-#   2
-
-
 if __name__ == "__main__":
+
+    # 5 blocks, all of them have 3 possible states
+    # block 'a' is currently at state 1 (second state), 'b' at state 2 (third state) etc
     a = BlockUnit(1, 3)
     b = BlockUnit(2, 3)
     c = BlockUnit(0, 3)
     d = BlockUnit(0, 3)
     e = BlockUnit(2, 3)
 
-    l = [a, b, c, d, e]
-    a.set_coord([b])
-    b.set_coord([a, c])
-    c.set_coord([b, d])
-    d.set_coord([c, e])
-    e.set_coord([d])
+    blocks = [a, b, c, d, e]
 
-    init_state = extract_states(l)
+    # Set linking, state change of 'a' will trigger state change of b
+    # State change of b will trigger state change of a and c. etc
+    a.set_link([b])
+    b.set_link([a, c])
+    c.set_link([b, d])
+    d.set_link([c, e])
+    e.set_link([d])
+
     term = [0, 0, 0, 0, 0]
 
-    board = Board(l, term)
+    board = Board(blocks, term)
 
     sol = board.solve()
 
-    reset_states(l, init_state)
-
-    print(verifier(l, sol, term))
+    if sol is None:
+        print('No solutions found')
 
 

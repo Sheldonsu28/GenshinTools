@@ -1,7 +1,6 @@
 from Block_class import BlockUnit
 
 from typing import List
-from typing import TypedDict
 from typing import Union
 import numpy as np
 
@@ -30,11 +29,19 @@ def solve_blocks_dfs(blocks: List[BlockUnit], terminate_cond: List[int], seen_st
 
 
 def solve_blocks_bfs(blocks: List[BlockUnit], terminate_cond: List[int], seen_state) -> Union[List[int], None]:
+    """
+    BFS with backtracking
+    :param blocks: List of blocks
+    :param terminate_cond: Condition to be satisfied
+    :param seen_state: States seen by the algorithm before
+    :return: sequence blocks to interact if solution is found.
+    """
     init_state = [b.curr_facing for b in blocks]
     queue = [init_state]
     seen_state[str(init_state)] = []
     counter = 0
     sol = None
+
     while len(queue) > 0:
         curr_state = queue.pop(0)
         reset_states(blocks, curr_state)
@@ -49,7 +56,6 @@ def solve_blocks_bfs(blocks: List[BlockUnit], terminate_cond: List[int], seen_st
                 queue += [new_state]
             reset_states(blocks, curr_state)
         counter += 1
-    print(seen_state)
     return sol
 
 
@@ -68,6 +74,7 @@ def verifier(blocks, operation, terminate_cond):
     result = extract_states(blocks)
     return terminate_cond == result
 
+
 if __name__ == "__main__":
     a = np.array([[3, 1, -1, 2],
                   [-5, 1, 3, -4],
@@ -77,4 +84,3 @@ if __name__ == "__main__":
                   [4, -1, 1],
                   [201, 102, -99]])
     print(np.linalg.det(b))
-
